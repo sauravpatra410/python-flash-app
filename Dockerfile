@@ -1,13 +1,16 @@
 FROM python:3.9-slim
 
-# Copy app files into the container
-COPY . /app
-
-# Set the working directory
+# Set working directory
 WORKDIR /app
 
-# Install Python dependencies
+# Copy project files
+COPY . /app
+
+# Install dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Command to run the Flask app
+# Expose port 5000 for Flask
+EXPOSE 5000
+
+# Start the Flask app
 CMD ["python3", "app.py"]
