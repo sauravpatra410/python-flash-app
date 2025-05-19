@@ -3,14 +3,18 @@ FROM python:3.9-slim
 # Set working directory
 WORKDIR /app
 
-# Copy project files
+# Copy app files
 COPY . /app
 
-# Install dependencies
-RUN pip install --no-cache-dir -r requirements.txt
+# Install system packages (procps gives you `ps`)
+RUN apt-get update && \
+    apt-get install -y procps && \
+    pip install --no-cache-dir -r requirements.txt && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
-# Expose port 5000 for Flask
+# Expose Flask port
 EXPOSE 5000
 
-# Start the Flask app
+# Run the app
 CMD ["python3", "app.py"]

@@ -1,20 +1,11 @@
-FROM python:3.9-slim
+from flask import Flask
 
-# Set working directory
-WORKDIR /app
+app = Flask(__name__)
 
-# Copy app files
-COPY . /app
+@app.route('/')
+def hello():
+    return "Hello from Flask inside Docker!"
 
-# Install system packages (procps gives you `ps`)
-RUN apt-get update && \
-    apt-get install -y procps && \
-    pip install --no-cache-dir -r requirements.txt && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
-
-# Expose Flask port
-EXPOSE 5000
-
-# Run the app
-CMD ["python3", "app.py"]
+if __name__ == "__main__":
+    # Bind to 0.0.0.0 so it's accessible outside the container
+    app.run(host='0.0.0.0', port=5000)
